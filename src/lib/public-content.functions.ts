@@ -41,6 +41,14 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(async ()
   return data ?? [];
 });
 
+export const getHeroSlides = createServerFn({ method: "GET" }).handler(async () => {
+  const { data } = await publicClient()
+    .from("hero_slides")
+    .select("id, title, image_url")
+    .order("sort_order", { ascending: true });
+  return data ?? [];
+});
+
 export const sendContactMessage = createServerFn({ method: "POST" })
   .inputValidator((input: { name: string; email: string; phone?: string; message: string }) => {
     if (!input.name.trim() || !input.email.trim() || !input.message.trim()) {

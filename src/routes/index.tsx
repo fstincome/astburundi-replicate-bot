@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
-import { getRealizations, getSiteContent } from "@/lib/public-content.functions";
+import { HeroCarousel } from "@/components/hero-carousel";
+import { getHeroSlides, getRealizations, getSiteContent } from "@/lib/public-content.functions";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   loader: async () => ({
     content: await getSiteContent(),
     gallery: await getRealizations(),
+    slides: await getHeroSlides(),
   }),
   component: Index,
   head: () => ({
@@ -24,9 +26,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { content, gallery } = Route.useLoaderData();
+  const { content, gallery, slides } = Route.useLoaderData();
   const { t } = useI18n();
-  const hero = content.find((item) => item.key === "hero");
   const cards = content.filter((item) => item.key !== "hero");
 
   return (
@@ -34,12 +35,7 @@ function Index() {
       <SiteHeader />
 
       <main>
-        <section className="hero" aria-label="Présentation de l’AST">
-          <img src={hero?.image_url || "/images/ast/hero.jpeg"} alt="Membres de l’Association pour la Solidarité au Travail" />
-          <div className="hero-shade" />
-          <span className="hero-arrow left" aria-hidden="true">‹</span><span className="hero-arrow right" aria-hidden="true">›</span>
-          <div className="hero-caption"><h1>{hero?.title || t("home.title")}</h1><div className="hero-dots"><i /><i /><i /></div></div>
-        </section>
+        <HeroCarousel slides={slides.length ? slides : [{ id: "fallback", title: t("home.title"), image_url: "/images/ast/hero.jpeg" }]} />
 
         <section className="about-section">
           <h2>{t("home.title")}</h2>

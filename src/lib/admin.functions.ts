@@ -16,16 +16,18 @@ export const getAdminOverview = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await assertAdmin(context as Ctx);
     const supabase = (context as Ctx).supabase;
-    const [publications, realizations, content, messages] = await Promise.all([
+    const [publications, realizations, content, slides, messages] = await Promise.all([
       supabase.from("publications").select("*").order("sort_order"),
       supabase.from("realizations").select("*").order("sort_order"),
       supabase.from("site_content").select("*").order("sort_order"),
+      supabase.from("hero_slides").select("*").order("sort_order"),
       supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
     ]);
     return {
       publications: publications.data ?? [],
       realizations: realizations.data ?? [],
       content: content.data ?? [],
+      slides: slides.data ?? [],
       messages: messages.data ?? [],
     };
   });
@@ -100,6 +102,35 @@ export const saveSiteContent = createServerFn({ method: "POST" })
       .from("site_content")
       .update({ title: data.title, body: data.body, image_url: data.image_url })
       .eq("key", data.key);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
+
+export const saveHeroSlide = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id?: string; title: string; image_url: string; sort_order: number }) => input)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context as Ctx);
+    const supabase = (context as Ctx).supabase;
+    const row = { title: data.title.trim(), image_url: data.image_url.trim(), sort_order: data.sort_order };
+    if (!row.title || !row.image_url) throw new Error("Titre et image obligatoires");
+    const res = data.id
+      ? await supabase.from("hero_slides").update(row).eq("id", data.id)
+      : await supabase.from("hero_slides").insert(row);
+    if (res.error) throw new Error(res.error.message);
+    return { ok: true as const };
+  });
+
+export const deleteHeroSlide = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string }) => input)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context as Ctx);
+    const supabase = (context as Ctx).supabase;
+    const { count, error: countError } = await supabase.from("hero_slides").select("id", { count: "exact", head: true });
+    if (countError) throw new Error(countError.message);
+    if ((count ?? 0) <= 1) throw new Error("Le diaporama doit conserver au moins une image");
+    const { error } = await supabase.from("hero_slides").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
