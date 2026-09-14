@@ -178,6 +178,13 @@
   .about-section, .gallery-section { padding: 20px 4% 55px; }
   .about-section > h2, .gallery-section > h2 { margin: 0; text-align: center; font-size: 18px; font-weight: 700; color: var(--color-foreground); }
   .title-rule { width: 48px; height: 3px; margin: 11px auto 26px; background: var(--color-primary); }
+  .section-intro { max-width: 760px; margin: 0 auto 28px; color: var(--color-muted-foreground); font: 14px/1.8 Arial, sans-serif; text-align: center; }
+  .page-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
+  .page-actions.centered { justify-content: center; margin: 0 auto 34px; }
+  .action-link { display: inline-flex; min-height: 42px; box-sizing: border-box; align-items: center; justify-content: center; padding: 11px 18px; border: 1px solid var(--color-primary); border-radius: var(--radius); font-size: 12px; font-weight: 700; transition: background .2s, color .2s; }
+  .action-link.primary { background: var(--color-primary); color: var(--color-primary-foreground); }
+  .action-link.secondary { background: var(--color-background); color: var(--color-primary); }
+  .action-link:hover { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-primary-foreground); }
   .service-grid, .gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
   .service-card, .gallery-card { overflow: hidden; background: var(--color-card); border: 1px solid var(--color-border); border-radius: 0; }
   .service-card > img { width: 100%; aspect-ratio: 1.5; object-fit: cover; }
@@ -189,6 +196,7 @@
   .gallery-card { border: 0; background: var(--color-background); }
   .gallery-card img { width: 100%; height: 250px; object-fit: cover; }
   .gallery-card a { display: block; padding: 16px; font-size: 12px; font-weight: 600; line-height: 1.55; }
+  .gallery-section > .page-actions { margin-top: 30px; margin-bottom: 0; }
   .site-footer { background: var(--color-foreground); color: var(--color-primary-foreground); }
   .footer-grid { width: 92%; box-sizing: border-box; margin: 0 auto; padding: 42px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 38px; font: 12px/1.7 Arial, sans-serif; }
   .footer-grid h3 { font-family: var(--font-sans); font-size: 15px; margin: 0 0 16px; } .footer-grid p { opacity: .75; }
@@ -212,6 +220,11 @@
   .project-card div { padding: 22px; }
   .project-card span, .notice-label { color: var(--color-primary); font-size: 10px; font-weight: 700; text-transform: uppercase; }
   .project-card h2 { margin: 8px 0; font-size: 18px; }
+  .page-cta { margin-top: 52px; padding: 30px; display: flex; align-items: center; justify-content: space-between; gap: 30px; border-left: 4px solid var(--color-primary); background: var(--color-secondary); }
+  .page-cta h2 { margin: 0; font-size: 20px; }
+  .page-cta p { max-width: 720px; margin: 8px 0 0; }
+  .page-cta .action-link { flex-shrink: 0; }
+  .page-cta.compact { margin-top: 30px; }
   .notice-list { display: grid; gap: 20px; }
   .notice-row { display: grid; grid-template-columns: 90px 1fr; gap: 25px; padding: 28px; border: 1px solid var(--color-border); }
   .notice-date { height: 76px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--color-primary); color: var(--color-primary-foreground); }
@@ -222,6 +235,8 @@
   .contact-layout h2 { margin-top: 0; }.contact-layout dl { margin-top: 30px; }
   .contact-layout dt { margin-top: 20px; color: var(--color-primary); font-size: 11px; font-weight: 700; text-transform: uppercase; }
   .contact-layout dd { margin: 5px 0 0; font: 14px/1.7 Arial, sans-serif; }
+  .contact-link { color: var(--color-accent); font-weight: 600; }
+  .contact-link:hover { text-decoration: underline; }
   .contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .contact-form label { display: grid; gap: 7px; font-size: 11px; font-weight: 700; }
   .contact-form label:last-of-type { grid-column: 1 / -1; }
@@ -241,6 +256,7 @@
     .page-banner { min-height: 200px; }.page-banner h1 { font-size: 27px; }
     .story-grid, .values-grid, .project-grid, .contact-layout { grid-template-columns: 1fr; }
     .story-grid img { height: 260px; }.values-grid { margin-top: 32px; }
+    .page-cta { align-items: flex-start; flex-direction: column; padding: 24px 20px; }
     .notice-row { grid-template-columns: 68px 1fr; padding: 18px; gap: 16px; }
     .contact-form { grid-template-columns: 1fr; }.contact-form label:last-of-type { grid-column: auto; }
   }

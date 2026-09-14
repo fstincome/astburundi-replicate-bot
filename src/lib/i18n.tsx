@@ -16,7 +16,12 @@ const dict = {
     "footer.about": "À propos",
     "footer.publications": "Publications",
     "home.title": "Association pour la Solidarité au Travail (AST)",
+    "home.intro":
+      "Nous accompagnons les communautés burundaises par des actions concrètes en faveur de l’inclusion, de l’autonomie et du développement durable.",
+    "home.discover": "Découvrir l’AST",
+    "home.contactUs": "Nous contacter",
     "home.gallery": "Notre galerie",
+    "home.allProjects": "Voir toutes nos réalisations",
     "home.learnMore": "En savoir plus",
     "about.eyebrow": "Qui sommes-nous ?",
     "about.title": "À propos de l’AST",
@@ -25,6 +30,10 @@ const dict = {
       "L’Association pour la Solidarité au Travail, en sigle AST, est une organisation de droit burundais à but non lucratif et apolitique.",
     "about.history2":
       "Elle œuvre dans le développement social, la santé, l’éducation, la protection de l’environnement, la formation et la réinsertion.",
+    "about.commitment":
+      "Au plus près des réalités locales, nous construisons nos projets avec les communautés et nos partenaires afin d’apporter des réponses durables aux besoins prioritaires.",
+    "about.actions": "Voir nos réalisations",
+    "about.join": "Échangeons ensemble",
     "about.missionTitle": "Notre mission",
     "about.mission":
       "Contribuer à une société burundaise inclusive, caractérisée par un environnement socio-économique favorable et un accès équitable aux services essentiels.",
@@ -36,10 +45,20 @@ const dict = {
       "Solidarité, inclusion, équité, responsabilité, respect des droits humains et protection des ressources naturelles.",
     "real.eyebrow": "Actions sur le terrain",
     "real.title": "Nos réalisations",
+    "real.intro":
+      "Chaque initiative répond à un besoin identifié avec les communautés. Découvrez quelques actions qui traduisent notre engagement sur le terrain.",
+    "real.ctaTitle": "Construisons de nouvelles solutions ensemble",
+    "real.ctaText":
+      "Vous souhaitez soutenir une initiative, proposer un partenariat ou en savoir plus sur nos activités ? Notre équipe est à votre écoute.",
+    "real.ctaButton": "Devenir partenaire",
     "real.empty": "Aucune réalisation pour le moment.",
     "real.unavailable": "Les réalisations ne sont pas disponibles pour le moment.",
     "pub.eyebrow": "Annonces et documents",
     "pub.title": "Publications",
+    "pub.intro":
+      "Retrouvez ici nos avis, appels d’offres et documents utiles. Chaque publication précise les informations nécessaires et les échéances à retenir.",
+    "pub.help": "Vous recherchez un document ou une information complémentaire ?",
+    "pub.contact": "Contacter notre équipe",
     "pub.empty": "Aucune publication pour le moment.",
     "pub.unavailable": "Les publications ne sont pas disponibles pour le moment.",
     "pub.document": "Consulter le document →",
@@ -48,6 +67,8 @@ const dict = {
     "contact.details": "Coordonnées",
     "contact.intro":
       "Notre équipe est disponible pour toute demande concernant nos activités, partenariats et publications.",
+    "contact.extra":
+      "Écrivez-nous en précisant l’objet de votre demande. Nous vous répondrons dans les meilleurs délais.",
     "contact.phone": "Téléphone",
     "contact.email": "Courriel",
     "contact.social": "Réseaux sociaux",
@@ -74,7 +95,12 @@ const dict = {
     "footer.about": "About",
     "footer.publications": "Publications",
     "home.title": "Association for Solidarity at Work (AST)",
+    "home.intro":
+      "We support Burundian communities through practical action promoting inclusion, self-reliance and sustainable development.",
+    "home.discover": "Discover AST",
+    "home.contactUs": "Contact us",
     "home.gallery": "Our gallery",
+    "home.allProjects": "View all our work",
     "home.learnMore": "Learn more",
     "about.eyebrow": "Who are we?",
     "about.title": "About AST",
@@ -83,6 +109,10 @@ const dict = {
       "The Association for Solidarity at Work (AST) is a non-profit, non-political organisation established under Burundian law.",
     "about.history2":
       "It works in social development, health, education, environmental protection, training and reintegration.",
+    "about.commitment":
+      "Working closely with local communities, we develop projects with residents and partners to provide lasting responses to priority needs.",
+    "about.actions": "View our work",
+    "about.join": "Let’s talk",
     "about.missionTitle": "Our mission",
     "about.mission":
       "To contribute to an inclusive Burundian society with a favourable socio-economic environment and fair access to essential services.",
@@ -94,10 +124,20 @@ const dict = {
       "Solidarity, inclusion, fairness, accountability, respect for human rights and protection of natural resources.",
     "real.eyebrow": "Action in the field",
     "real.title": "Our work",
+    "real.intro":
+      "Every initiative addresses a need identified with local communities. Explore some of the projects that reflect our work in the field.",
+    "real.ctaTitle": "Let’s build new solutions together",
+    "real.ctaText":
+      "Would you like to support an initiative, propose a partnership or learn more about our work? Our team is ready to listen.",
+    "real.ctaButton": "Become a partner",
     "real.empty": "No projects yet.",
     "real.unavailable": "Projects are unavailable right now.",
     "pub.eyebrow": "Notices and documents",
     "pub.title": "Publications",
+    "pub.intro":
+      "Find our notices, calls for tenders and useful documents here. Each publication includes the key information and deadlines to remember.",
+    "pub.help": "Looking for a document or more information?",
+    "pub.contact": "Contact our team",
     "pub.empty": "No publications yet.",
     "pub.unavailable": "Publications are unavailable right now.",
     "pub.document": "View the document →",
@@ -106,6 +146,8 @@ const dict = {
     "contact.details": "Contact details",
     "contact.intro":
       "Our team is available for any request about our activities, partnerships and publications.",
+    "contact.extra":
+      "Write to us and tell us the purpose of your enquiry. We will respond as soon as possible.",
     "contact.phone": "Phone",
     "contact.email": "Email",
     "contact.social": "Social media",

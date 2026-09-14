@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
 import { getRealizations } from "@/lib/public-content.functions";
 import { useI18n } from "@/lib/i18n";
@@ -25,6 +25,7 @@ function RealizationsPage() {
   const { t } = useI18n();
   return (
     <InteriorPage title={t("real.title")} eyebrow={t("real.eyebrow")}>
+      <p className="section-intro">{t("real.intro")}</p>
       <div className="project-grid">
         {projects.length === 0 && <p>{t("real.empty")}</p>}
         {projects.map((project) => (
@@ -38,6 +39,10 @@ function RealizationsPage() {
           </article>
         ))}
       </div>
+      <section className="page-cta">
+        <div><h2>{t("real.ctaTitle")}</h2><p>{t("real.ctaText")}</p></div>
+        <Link to="/contact" className="action-link primary">{t("real.ctaButton")}</Link>
+      </section>
     </InteriorPage>
   );
 }

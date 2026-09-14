@@ -44,10 +44,11 @@ function ContactPage() {
         <section>
           <h2>{t("contact.details")}</h2>
           <p>{t("contact.intro")}</p>
+          <p>{t("contact.extra")}</p>
           <dl>
-            <dt>{t("contact.phone")}</dt><dd>+257 61 55 64 67</dd>
-            <dt>{t("contact.email")}</dt><dd>astburundi@gmail.com<br />info@astburundi.com</dd>
-            <dt>{t("contact.social")}</dt><dd>{t("contact.socialValue")}</dd>
+            <dt>{t("contact.phone")}</dt><dd><a className="contact-link" href="tel:+25761556467">+257 61 55 64 67</a></dd>
+            <dt>{t("contact.email")}</dt><dd><a className="contact-link" href="mailto:astburundi@gmail.com">astburundi@gmail.com</a><br /><a className="contact-link" href="mailto:info@astburundi.com">info@astburundi.com</a></dd>
+            <dt>{t("contact.social")}</dt><dd><a className="contact-link" href="https://www.facebook.com/profile.php?id=61556201796697" target="_blank" rel="noreferrer">{t("contact.socialValue")}</a></dd>
           </dl>
         </section>
         <form className="contact-form" onSubmit={onSubmit}>
