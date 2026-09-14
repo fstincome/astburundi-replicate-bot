@@ -35,16 +35,14 @@ function Index() {
       <SiteHeader />
 
       <main>
-        <HeroCarousel slides={slides.length ? slides : [{ id: "fallback", title: t("home.title"), image_url: "/images/ast/hero.jpeg" }]} />
+        <HeroCarousel
+          slides={slides.length ? slides : [{ id: "fallback", title: t("home.title"), image_url: "/images/ast/hero.jpeg" }]}
+          intro={t("home.intro")}
+          discoverLabel={t("home.discover")}
+          contactLabel={t("home.contactUs")}
+        />
 
         <section className="about-section">
-          <h2>{t("home.title")}</h2>
-          <div className="title-rule" />
-          <p className="section-intro">{t("home.intro")}</p>
-          <div className="page-actions centered">
-            <Link to="/about" className="action-link primary">{t("home.discover")}</Link>
-            <Link to="/contact" className="action-link secondary">{t("home.contactUs")}</Link>
-          </div>
           <div className="service-grid">
             {cards.map((card) => <article className="service-card" key={card.key}>
               <img src={card.image_url || "/images/ast/services.jpg"} alt="Activités communautaires de l’AST" />
