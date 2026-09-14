@@ -1,7 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
+import { getRealizations, getSiteContent } from "@/lib/public-content.functions";
 
 export const Route = createFileRoute("/")({
+  loader: async () => ({
+    content: await getSiteContent(),
+    gallery: await getRealizations(),
+  }),
   component: Index,
   head: () => ({
     meta: [
