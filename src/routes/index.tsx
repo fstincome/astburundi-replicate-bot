@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteFooter, SiteHeader } from "@/components/site-shell";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -40,46 +41,36 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="site-header">
-        <div className="site-nav">
-          <a href="#accueil" aria-label="Accueil AST"><img src="/images/ast/logo.png" alt="Logo AST" className="site-logo" /></a>
-          <nav aria-label="Navigation principale" className="desktop-nav">
-            <a className="active" href="#accueil">ACCUEIL</a><a href="#about">ABOUT US</a><a href="#realisations">REALIZATION</a><a href="#publication">PUBLICATION⌄</a><a href="#contact">CONTACT</a>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main>
-        <section id="accueil" className="hero" aria-label="Présentation de l’AST">
+        <section className="hero" aria-label="Présentation de l’AST">
           <img src="/images/ast/hero.jpeg" alt="Membres de l’Association pour la Solidarité au Travail" />
           <div className="hero-shade" />
           <span className="hero-arrow left" aria-hidden="true">‹</span><span className="hero-arrow right" aria-hidden="true">›</span>
           <div className="hero-caption"><h1>Association pour la Solidarité au Travail (AST)</h1><div className="hero-dots"><i /><i /><i /></div></div>
         </section>
 
-        <section id="about" className="about-section">
+        <section className="about-section">
           <h2>Association pour la Solidarité au Travail (AST)</h2>
           <div className="title-rule" />
           <div className="service-grid">
             {cards.map((card) => <article className="service-card" key={card.title}>
               <img src="/images/ast/services.jpg" alt="Activités communautaires de l’AST" />
-              <div className="service-copy"><h3>{card.title}</h3><p>{card.text}</p><a href="#realisations">Learn More</a></div>
+              <div className="service-copy"><h3>{card.title}</h3><p>{card.text}</p><Link to="/about">Learn More</Link></div>
             </article>)}
           </div>
         </section>
 
-        <section id="realisations" className="gallery-section">
+        <section className="gallery-section">
           <h2>Notre garelly</h2><div className="title-rule" />
           <div className="gallery-grid">{gallery.map((item) => <article className="gallery-card" key={item.title}>
-            <img src={item.image} alt={item.title} loading="lazy" /><a href="#publication">{item.title}</a>
+            <img src={item.image} alt={item.title} loading="lazy" /><Link to="/realizations">{item.title}</Link>
           </article>)}</div>
         </section>
       </main>
 
-      <footer id="contact" className="site-footer">
-        <div className="footer-grid"><div><img src="/images/ast/logo.png" alt="AST" className="footer-logo" /><p>Association pour la Solidarité au Travail</p></div><div><h3>Find us</h3><p>+257 61 55 64 67</p><p>astburundi@gmail.com</p><p>info@astburundi.com</p></div><div><h3>Follow us</h3><p><a href="https://www.facebook.com/profile.php?id=61556201796697">facebook.com</a></p><p>youtube.com</p></div><div><h3>Recent posts</h3></div></div>
-        <div className="copyright">All Rights Reserved. © 2014 astburundi Design By : Nova Software Company</div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
