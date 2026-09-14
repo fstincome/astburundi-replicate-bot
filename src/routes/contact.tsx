@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { InteriorPage } from "@/components/site-shell";
 import { sendContactMessage } from "@/lib/public-content.functions";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({ meta: [
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const send = useServerFn(sendContactMessage);
+  const { t } = useI18n();
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -37,27 +39,27 @@ function ContactPage() {
   }
 
   return (
-    <InteriorPage title="Contactez-nous" eyebrow="Parlons de votre projet">
+    <InteriorPage title={t("contact.title")} eyebrow={t("contact.eyebrow")}>
       <div className="contact-layout">
         <section>
-          <h2>Coordonnées</h2>
-          <p>Notre équipe est disponible pour toute demande concernant nos activités, partenariats et publications.</p>
+          <h2>{t("contact.details")}</h2>
+          <p>{t("contact.intro")}</p>
           <dl>
-            <dt>Téléphone</dt><dd>+257 61 55 64 67</dd>
-            <dt>Courriel</dt><dd>astburundi@gmail.com<br />info@astburundi.com</dd>
-            <dt>Réseaux sociaux</dt><dd>AST Burundi sur Facebook</dd>
+            <dt>{t("contact.phone")}</dt><dd>+257 61 55 64 67</dd>
+            <dt>{t("contact.email")}</dt><dd>astburundi@gmail.com<br />info@astburundi.com</dd>
+            <dt>{t("contact.social")}</dt><dd>{t("contact.socialValue")}</dd>
           </dl>
         </section>
         <form className="contact-form" onSubmit={onSubmit}>
-          <label>Nom complet<input name="name" type="text" required /></label>
-          <label>Adresse e-mail<input name="email" type="email" required /></label>
-          <label>Téléphone<input name="phone" type="tel" /></label>
-          <label>Message<textarea name="message" rows={6} required /></label>
+          <label>{t("contact.name")}<input name="name" type="text" required /></label>
+          <label>{t("contact.emailField")}<input name="email" type="email" required /></label>
+          <label>{t("contact.phoneField")}<input name="phone" type="tel" /></label>
+          <label>{t("contact.message")}<textarea name="message" rows={6} required /></label>
           <button type="submit" disabled={status === "sending"}>
-            {status === "sending" ? "Envoi…" : "Envoyer le message"}
+            {status === "sending" ? t("contact.sending") : t("contact.send")}
           </button>
-          {status === "sent" && <p className="form-status">Merci, votre message a bien été envoyé.</p>}
-          {status === "error" && <p className="form-status error">L’envoi a échoué. Veuillez réessayer.</p>}
+          {status === "sent" && <p className="form-status">{t("contact.sent")}</p>}
+          {status === "error" && <p className="form-status error">{t("contact.failed")}</p>}
         </form>
       </div>
     </InteriorPage>

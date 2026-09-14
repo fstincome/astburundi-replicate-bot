@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
 import { getRealizations } from "@/lib/public-content.functions";
+import { useI18n } from "@/lib/i18n";
+
+function RealizationsFallback({ messageKey }: { messageKey: "real.empty" | "real.unavailable" }) {
+  const { t } = useI18n();
+  return <InteriorPage title={t("real.title")} eyebrow={t("real.eyebrow")}><p>{t(messageKey)}</p></InteriorPage>;
+}
 
 export const Route = createFileRoute("/realizations")({
   loader: () => getRealizations(),
@@ -10,16 +16,17 @@ export const Route = createFileRoute("/realizations")({
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ], links: [{ rel: "canonical", href: "/realizations" }] }),
   component: RealizationsPage,
-  errorComponent: () => <InteriorPage title="Nos réalisations" eyebrow="Actions sur le terrain"><p>Les réalisations ne sont pas disponibles pour le moment.</p></InteriorPage>,
-  notFoundComponent: () => <InteriorPage title="Nos réalisations" eyebrow="Actions sur le terrain"><p>Aucune réalisation.</p></InteriorPage>,
+  errorComponent: () => <RealizationsFallback messageKey="real.unavailable" />,
+  notFoundComponent: () => <RealizationsFallback messageKey="real.empty" />,
 });
 
 function RealizationsPage() {
   const projects = Route.useLoaderData();
+  const { t } = useI18n();
   return (
-    <InteriorPage title="Nos réalisations" eyebrow="Actions sur le terrain">
+    <InteriorPage title={t("real.title")} eyebrow={t("real.eyebrow")}>
       <div className="project-grid">
-        {projects.length === 0 && <p>Aucune réalisation pour le moment.</p>}
+        {projects.length === 0 && <p>{t("real.empty")}</p>}
         {projects.map((project) => (
           <article className="project-card" key={project.id}>
             <img src={project.image_url} alt={project.title} />
