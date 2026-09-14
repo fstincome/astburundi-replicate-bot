@@ -10,6 +10,8 @@ import {
   saveRealization,
   deleteRealization,
   saveSiteContent,
+  saveHeroSlide,
+  deleteHeroSlide,
   setMessageRead,
   deleteMessage,
 } from "@/lib/admin.functions";
@@ -81,7 +83,7 @@ function AdminPage() {
         {error && <p className="auth-error">Accès refusé ou erreur de chargement.</p>}
         {data && tab === "publications" && <PublicationsPanel rows={data.publications} onDone={refetch} />}
         {data && tab === "realizations" && <RealizationsPanel rows={data.realizations} onDone={refetch} />}
-        {data && tab === "content" && <ContentPanel rows={data.content} onDone={refetch} />}
+        {data && tab === "content" && <ContentPanel rows={data.content} slides={data.slides} onDone={refetch} />}
         {data && tab === "messages" && <MessagesPanel rows={data.messages} onDone={refetch} />}
       </main>
     </div>
@@ -181,7 +183,7 @@ function RealizationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }
   );
 }
 
-function ContentPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
+function ContentPanel({ rows, slides, onDone }: { rows: any[]; slides: any[]; onDone: () => void }) {
   const save = useServerFn(saveSiteContent);
   const [drafts, setDrafts] = useState<Record<string, any>>(() =>
     Object.fromEntries(rows.map((row) => [row.key, { ...row }])),
@@ -190,7 +192,8 @@ function ContentPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
 
   return (
     <section className="admin-panel">
-      {rows.map((row) => {
+      <HeroSlidesPanel rows={slides} onDone={onDone} />
+      {rows.filter((row) => row.key !== "hero").map((row) => {
         const draft = drafts[row.key] ?? row;
         return (
           <form
@@ -203,7 +206,7 @@ function ContentPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
               onDone();
             }}
           >
-            <h2>{row.key === "hero" ? "Bandeau d’accueil" : `Bloc : ${row.title}`}</h2>
+            <h2>{`Bloc : ${row.title}`}</h2>
             <label className="full">Titre<input value={draft.title} onChange={(e) => setDrafts({ ...drafts, [row.key]: { ...draft, title: e.target.value } })} /></label>
             <label className="full">Texte<textarea rows={4} value={draft.body} onChange={(e) => setDrafts({ ...drafts, [row.key]: { ...draft, body: e.target.value } })} /></label>
             <label className="full">Image<input value={draft.image_url} onChange={(e) => setDrafts({ ...drafts, [row.key]: { ...draft, image_url: e.target.value } })} /></label>
@@ -215,6 +218,57 @@ function ContentPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
         );
       })}
     </section>
+  );
+}
+
+function HeroSlidesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
+  const save = useServerFn(saveHeroSlide);
+  const remove = useServerFn(deleteHeroSlide);
+  const empty = { title: "", image_url: "/images/ast/hero.jpeg", sort_order: rows.length + 1 };
+  const [form, setForm] = useState<any>(empty);
+  const [status, setStatus] = useState("");
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setStatus("Enregistrement…");
+    try {
+      await save({ data: { ...form, sort_order: Number(form.sort_order) } });
+      setForm(empty);
+      setStatus("Enregistré");
+      onDone();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Enregistrement impossible");
+    }
+  }
+
+  return (
+    <div className="admin-slides">
+      <form className="admin-form" onSubmit={submit}>
+        <h2>{form.id ? "Modifier la diapositive" : "Ajouter une diapositive"}</h2>
+        <label>Titre<input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required /></label>
+        <label>Ordre<input type="number" min="1" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} required /></label>
+        <label className="full">Image (chemin ou lien)<input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} required /></label>
+        <div className="admin-form-actions">
+          <button type="submit">Enregistrer</button>
+          {form.id && <button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</button>}
+          {status && <span className="admin-saved">{status}</span>}
+        </div>
+      </form>
+      <ul className="admin-list admin-slide-list">
+        {rows.map((row) => (
+          <li key={row.id}>
+            <img src={row.image_url} alt="" />
+            <div><strong>{row.title}</strong><span>Diapositive {row.sort_order}</span></div>
+            <div className="admin-row-actions">
+              <button type="button" onClick={() => setForm({ ...row })}>Modifier</button>
+              <button type="button" className="danger" disabled={rows.length <= 1} title={rows.length <= 1 ? "Une diapositive minimum" : undefined} onClick={async () => {
+                try { await remove({ data: { id: row.id } }); onDone(); } catch (error) { setStatus(error instanceof Error ? error.message : "Suppression impossible"); }
+              }}>Supprimer</button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
