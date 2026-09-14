@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
 import { getRealizations, getSiteContent } from "@/lib/public-content.functions";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   loader: async () => ({
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { content, gallery } = Route.useLoaderData();
+  const { t } = useI18n();
   const hero = content.find((item) => item.key === "hero");
   const cards = content.filter((item) => item.key !== "hero");
 
@@ -36,22 +38,22 @@ function Index() {
           <img src={hero?.image_url || "/images/ast/hero.jpeg"} alt="Membres de l’Association pour la Solidarité au Travail" />
           <div className="hero-shade" />
           <span className="hero-arrow left" aria-hidden="true">‹</span><span className="hero-arrow right" aria-hidden="true">›</span>
-          <div className="hero-caption"><h1>{hero?.title || "Association pour la Solidarité au Travail (AST)"}</h1><div className="hero-dots"><i /><i /><i /></div></div>
+          <div className="hero-caption"><h1>{hero?.title || t("home.title")}</h1><div className="hero-dots"><i /><i /><i /></div></div>
         </section>
 
         <section className="about-section">
-          <h2>Association pour la Solidarité au Travail (AST)</h2>
+          <h2>{t("home.title")}</h2>
           <div className="title-rule" />
           <div className="service-grid">
             {cards.map((card) => <article className="service-card" key={card.key}>
               <img src={card.image_url || "/images/ast/services.jpg"} alt="Activités communautaires de l’AST" />
-              <div className="service-copy"><h3>{card.title}</h3><p>{card.body}</p><Link to="/about">Learn More</Link></div>
+              <div className="service-copy"><h3>{card.title}</h3><p>{card.body}</p><Link to="/about">{t("home.learnMore")}</Link></div>
             </article>)}
           </div>
         </section>
 
         <section className="gallery-section">
-          <h2>Notre garelly</h2><div className="title-rule" />
+          <h2>{t("home.gallery")}</h2><div className="title-rule" />
           <div className="gallery-grid">{gallery.map((item) => <article className="gallery-card" key={item.id}>
             <img src={item.image_url} alt={item.title} loading="lazy" /><Link to="/realizations">{item.title}</Link>
           </article>)}</div>
