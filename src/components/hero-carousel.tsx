@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -8,7 +9,14 @@ type HeroSlide = {
   image_url: string;
 };
 
-export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
+type HeroCarouselProps = {
+  slides: HeroSlide[];
+  intro: string;
+  discoverLabel: string;
+  contactLabel: string;
+};
+
+export function HeroCarousel({ slides, intro, discoverLabel, contactLabel }: HeroCarouselProps) {
   const [active, setActive] = useState(0);
   const count = slides.length;
 
@@ -39,7 +47,14 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
           </article>
         ))}
       </div>
-      <div className="hero-caption" aria-live="polite"><h1>{slides[active]?.title}</h1></div>
+      <div className="hero-caption" aria-live="polite">
+        <h1>{slides[active]?.title}</h1>
+        <p>{intro}</p>
+        <div className="hero-actions">
+          <Link to="/about" className="action-link primary">{discoverLabel}</Link>
+          <Link to="/contact" className="action-link secondary">{contactLabel}</Link>
+        </div>
+      </div>
 
       {count > 1 && (
         <>
