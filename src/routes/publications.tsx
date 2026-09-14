@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
 import { getPublications } from "@/lib/public-content.functions";
 import { useI18n } from "@/lib/i18n";
@@ -31,6 +31,7 @@ function PublicationsPage() {
 
   return (
     <InteriorPage title={t("pub.title")} eyebrow={t("pub.eyebrow")}>
+      <p className="section-intro">{t("pub.intro")}</p>
       <div className="notice-list">
         {notices.length === 0 && <p>{t("pub.empty")}</p>}
         {notices.map((notice) => {
@@ -51,6 +52,10 @@ function PublicationsPage() {
           );
         })}
       </div>
+      <section className="page-cta compact">
+        <div><h2>{t("pub.help")}</h2></div>
+        <Link to="/contact" className="action-link primary">{t("pub.contact")}</Link>
+      </section>
     </InteriorPage>
   );
 }

@@ -40,6 +40,11 @@ function Index() {
         <section className="about-section">
           <h2>{t("home.title")}</h2>
           <div className="title-rule" />
+          <p className="section-intro">{t("home.intro")}</p>
+          <div className="page-actions centered">
+            <Link to="/about" className="action-link primary">{t("home.discover")}</Link>
+            <Link to="/contact" className="action-link secondary">{t("home.contactUs")}</Link>
+          </div>
           <div className="service-grid">
             {cards.map((card) => <article className="service-card" key={card.key}>
               <img src={card.image_url || "/images/ast/services.jpg"} alt="Activités communautaires de l’AST" />
@@ -53,6 +58,7 @@ function Index() {
           <div className="gallery-grid">{gallery.map((item) => <article className="gallery-card" key={item.id}>
             <img src={item.image_url} alt={item.title} loading="lazy" /><Link to="/realizations">{item.title}</Link>
           </article>)}</div>
+          <div className="page-actions centered"><Link to="/realizations" className="action-link primary">{t("home.allProjects")}</Link></div>
         </section>
       </main>
 

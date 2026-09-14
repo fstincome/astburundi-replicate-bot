@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
 import { useI18n } from "@/lib/i18n";
 
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   const { t } = useI18n();
   return <InteriorPage title={t("about.title")} eyebrow={t("about.eyebrow")}>
-    <section className="story-grid"><img src="/images/ast/gallery-3.jpg" alt="AST Burundi" /><div><h2>{t("about.historyTitle")}</h2><p>{t("about.history1")}</p><p>{t("about.history2")}</p></div></section>
+    <section className="story-grid"><img src="/images/ast/gallery-3.jpg" alt="AST Burundi" /><div><h2>{t("about.historyTitle")}</h2><p>{t("about.history1")}</p><p>{t("about.history2")}</p><p>{t("about.commitment")}</p><div className="page-actions"><Link to="/realizations" className="action-link primary">{t("about.actions")}</Link><Link to="/contact" className="action-link secondary">{t("about.join")}</Link></div></div></section>
     <section className="values-grid">
       <article><h2>{t("about.missionTitle")}</h2><p>{t("about.mission")}</p></article>
       <article><h2>{t("about.visionTitle")}</h2><p>{t("about.vision")}</p></article>
