@@ -23,26 +23,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const cards = [
-    {
-      title: "Mission",
-      text: "avoir une société Burundaise inclusive, caractérisée par un environnement socio-économique inclusif, par l’accès à l’éducation, aux soins de santé et aux services judiciaires équitables pour toutes les couches de la population.",
-    },
-    {
-      title: "Domaine d’intervention",
-      text: "(1) Promouvoir la santé sexuelle et reproductive, (2) Protection de droit de l’homme, (3) Promouvoir la protection de l’environnement, (4) Promouvoir l’entreprenariat pour le jeune et femme ; (5) Promouvoir l’éducation pour tous",
-    },
-    {
-      title: "Historique",
-      text: "L’Association pour la Solidarité au Travail, en sigle AST, est une organisation de droit Burundais à but non lucratif et apolitique, œuvrant dans le domaine du Développement social, de la Santé, de l’Education, de la Protection de l’Environnement, de la Formation et de la réinsertion.",
-    },
-  ];
-
-  const gallery = [
-    { image: "/images/ast/gallery-1.png", title: "ARRACHAGE DES PLANTS DANS LA PÉPINIÈRE PAR LES MEMBRES JEUNES DE L’ASSOCIATION POUR LA SOLIDARITÉ AU TRAVAIL (AST)" },
-    { image: "/images/ast/gallery-2.jpeg", title: "LANCEMENT DU PROJET ARBRE CROISSANCE AGRO ÉCOLOGIQUE (ACAE) EN COMMUNE BUGANDA DE LA PROVINCE CIBITOKE DU 18 NOVEMBRE 2024." },
-    { image: "/images/ast/gallery-3.jpg", title: "RETRAITE DU COMITÉ EXÉCUTIF ET LE STAFF DE L'ORGANISATION QUI A ÉTÉ EFFECTUÉ AU MOIS DE NOVEMBRE, SUR LES OBJECTIFS" },
-  ];
+  const { content, gallery } = Route.useLoaderData();
+  const hero = content.find((item) => item.key === "hero");
+  const cards = content.filter((item) => item.key !== "hero");
 
   return (
     <div className="min-h-screen bg-background text-foreground">
