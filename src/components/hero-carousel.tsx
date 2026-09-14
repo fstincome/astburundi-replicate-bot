@@ -31,15 +31,15 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
   return (
     <section className="hero" aria-roledescription="carousel" aria-label="Présentation de l’AST">
-      <div className="hero-slides" aria-live="polite">
+      <div className="hero-slides">
         {slides.map((slide, index) => (
           <article className={index === active ? "hero-slide active" : "hero-slide"} key={slide.id} aria-hidden={index !== active}>
             <img src={slide.image_url} alt="Activités de l’Association pour la Solidarité au Travail" />
             <div className="hero-shade" />
-            <div className="hero-caption"><h1>{slide.title}</h1></div>
           </article>
         ))}
       </div>
+      <div className="hero-caption" aria-live="polite"><h1>{slides[active]?.title}</h1></div>
 
       {count > 1 && (
         <>
