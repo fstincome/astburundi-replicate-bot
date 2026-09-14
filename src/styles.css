@@ -151,10 +151,10 @@
 
 @layer components {
   .site-header { height: 64px; background: var(--color-background); }
-  .site-nav { width: 92%; height: 100%; margin: auto; display: flex; align-items: center; justify-content: space-between; }
+  .site-nav { width: 92%; height: 100%; margin: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: clamp(20px, 4vw, 64px); }
   .site-logo { width: 64px; height: 46px; object-fit: contain; }
-  .desktop-nav { height: 100%; display: flex; align-items: center; gap: 7px; }
-  .desktop-nav a { padding: 11px 13px; border-radius: var(--radius); color: var(--color-muted-foreground); font-size: 10px; font-weight: 500; transition: background .2s, color .2s; }
+  .desktop-nav { min-width: 0; height: 100%; display: flex; align-items: center; justify-content: space-between; gap: clamp(4px, 1vw, 18px); }
+  .desktop-nav a { min-width: 0; padding: 11px clamp(8px, 1.1vw, 18px); border-radius: var(--radius); color: var(--color-muted-foreground); font-size: 11px; font-weight: 500; text-align: center; text-transform: lowercase; white-space: nowrap; transition: background .2s, color .2s; }
   .desktop-nav a:hover, .desktop-nav .active { background: var(--color-accent); color: var(--color-primary-foreground); }
   .lang-switch { display: inline-flex; margin-left: 10px; border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; }
   .lang-switch button { padding: 7px 10px; background: transparent; border: 0; cursor: pointer; font: inherit; font-size: 10px; font-weight: 600; color: var(--color-muted-foreground); }
@@ -225,9 +225,9 @@
 
   @media (max-width: 760px) {
     .site-header { height: auto; }
-    .site-nav { width: 100%; padding: 8px 18px; box-sizing: border-box; flex-direction: column; }
-    .desktop-nav { width: 100%; overflow-x: auto; justify-content: flex-start; }
-    .desktop-nav a { padding: 9px 10px; white-space: nowrap; }
+    .site-nav { width: 92%; padding: 8px 0; box-sizing: border-box; grid-template-columns: 1fr; justify-items: center; gap: 6px; }
+    .desktop-nav { width: 100%; height: auto; flex-wrap: wrap; justify-content: space-evenly; row-gap: 4px; }
+    .desktop-nav a { flex: 1 1 auto; padding: 9px 8px; }
     .hero { height: 480px; min-height: 0; }
     .hero-caption h1 { font-size: 18px; }
     .service-grid, .gallery-grid { grid-template-columns: 1fr; }
