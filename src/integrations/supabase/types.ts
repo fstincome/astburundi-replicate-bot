@@ -44,6 +44,33 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_slides: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       publications: {
         Row: {
           created_at: string
