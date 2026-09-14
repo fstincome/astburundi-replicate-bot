@@ -4,11 +4,11 @@ export type Lang = "fr" | "en";
 
 const dict = {
   fr: {
-    "nav.home": "ACCUEIL",
-    "nav.about": "À PROPOS",
-    "nav.realizations": "RÉALISATIONS",
-    "nav.publications": "PUBLICATIONS",
-    "nav.contact": "CONTACT",
+    "nav.home": "Accueil",
+    "nav.about": "À propos",
+    "nav.realizations": "Réalisations",
+    "nav.publications": "Publications",
+    "nav.contact": "Contact",
     "footer.tagline": "Association pour la Solidarité au Travail",
     "footer.contact": "Nous contacter",
     "footer.follow": "Nous suivre",
@@ -62,11 +62,11 @@ const dict = {
     "contact.failed": "L’envoi a échoué. Veuillez réessayer.",
   },
   en: {
-    "nav.home": "HOME",
-    "nav.about": "ABOUT US",
-    "nav.realizations": "OUR WORK",
-    "nav.publications": "PUBLICATIONS",
-    "nav.contact": "CONTACT",
+    "nav.home": "Home",
+    "nav.about": "About us",
+    "nav.realizations": "Our work",
+    "nav.publications": "Publications",
+    "nav.contact": "Contact",
     "footer.tagline": "Association for Solidarity at Work",
     "footer.contact": "Contact us",
     "footer.follow": "Follow us",
