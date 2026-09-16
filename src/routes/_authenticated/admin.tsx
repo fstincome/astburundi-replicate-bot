@@ -10,6 +10,8 @@ import {
   saveRealization,
   deleteRealization,
   saveSiteContent,
+  saveBlogPost,
+  deleteBlogPost,
   saveHeroSlide,
   deleteHeroSlide,
   setMessageRead,
@@ -31,7 +33,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
 });
 
-type Tab = "publications" | "realizations" | "content" | "messages";
+type Tab = "publications" | "realizations" | "blog" | "content" | "messages";
 
 function AdminPage() {
   const navigate = useNavigate();
@@ -68,6 +70,7 @@ function AdminPage() {
         {([
           ["publications", "Publications"],
           ["realizations", "Réalisations"],
+          ["blog", "Blog"],
           ["content", "Accueil"],
           ["messages", "Messages"],
         ] as [Tab, string][]).map(([value, label]) => (
@@ -83,6 +86,7 @@ function AdminPage() {
         {error && <p className="auth-error">Accès refusé ou erreur de chargement.</p>}
         {data && tab === "publications" && <PublicationsPanel rows={data.publications} onDone={refetch} />}
         {data && tab === "realizations" && <RealizationsPanel rows={data.realizations} onDone={refetch} />}
+        {data && tab === "blog" && <BlogPanel rows={data.posts} onDone={refetch} />}
         {data && tab === "content" && <ContentPanel rows={data.content} slides={data.slides} onDone={refetch} />}
         {data && tab === "messages" && <MessagesPanel rows={data.messages} onDone={refetch} />}
       </main>
@@ -297,5 +301,62 @@ function MessagesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
         </li>
       ))}
     </ul>
+  );
+}
+
+function BlogPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
+  const save = useServerFn(saveBlogPost);
+  const remove = useServerFn(deleteBlogPost);
+  const empty = {
+    slug: "", title: "", excerpt: "", body: "", image_url: "/images/ast/gallery-2.jpeg",
+    author: "AST Burundi", is_published: true, published_on: new Date().toISOString().slice(0, 10),
+  };
+  const [form, setForm] = useState<any>(empty);
+  const [status, setStatus] = useState("");
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setStatus("Enregistrement…");
+    try {
+      await save({ data: form });
+      setForm(empty);
+      setStatus("Enregistré");
+      onDone();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Enregistrement impossible");
+    }
+  }
+
+  return (
+    <section className="admin-panel">
+      <form className="admin-form" onSubmit={submit}>
+        <h2>{form.id ? "Modifier l’article" : "Nouvel article"}</h2>
+        <label>Titre<input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required /></label>
+        <label>Lien court (optionnel)<input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="genere-depuis-le-titre" /></label>
+        <label className="full">Chapeau<textarea rows={2} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} /></label>
+        <label className="full">Contenu<textarea rows={10} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} /></label>
+        <label>Image (chemin ou lien)<input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} /></label>
+        <label>Auteur<input value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} /></label>
+        <label>Date<input type="date" value={form.published_on} onChange={(e) => setForm({ ...form, published_on: e.target.value })} required /></label>
+        <label>Publié<input type="checkbox" checked={form.is_published} onChange={(e) => setForm({ ...form, is_published: e.target.checked })} /></label>
+        <div className="admin-form-actions">
+          <button type="submit">Publier / Enregistrer</button>
+          {form.id && <button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</button>}
+          {status && <span className="admin-saved">{status}</span>}
+        </div>
+      </form>
+
+      <ul className="admin-list">
+        {rows.map((row) => (
+          <li key={row.id}>
+            <div><strong>{row.title}</strong><span>{row.published_on} · {row.is_published ? "publié" : "brouillon"}</span></div>
+            <div className="admin-row-actions">
+              <button type="button" onClick={() => setForm({ ...row })}>Modifier</button>
+              <button type="button" className="danger" onClick={async () => { await remove({ data: { id: row.id } }); onDone(); }}>Supprimer</button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
