@@ -251,7 +251,7 @@
   @media (max-width: 760px) {
     .site-header { height: auto; }
     .site-nav { width: 92%; padding: 8px 0; box-sizing: border-box; grid-template-columns: 1fr; justify-items: center; gap: 6px; }
-    .desktop-nav { width: 100%; height: auto; flex-wrap: wrap; justify-content: space-evenly; row-gap: 4px; }
+    .desktop-nav { width: 100%; height: auto; flex-wrap: wrap; justify-content: space-evenly; row-gap: 2px; padding: 4px; }
     .desktop-nav a { flex: 1 1 auto; padding: 9px 8px; }
     .hero { height: 480px; min-height: 0; }
     .hero-caption { bottom: 62px; left: 14%; right: 14%; }
