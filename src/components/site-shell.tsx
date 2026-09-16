@@ -2,11 +2,12 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useI18n, type TKey } from "@/lib/i18n";
 
-const navigation: { to: "/" | "/about" | "/realizations" | "/publications" | "/contact"; key: TKey }[] = [
+const navigation: { to: "/" | "/about" | "/realizations" | "/publications" | "/blog" | "/contact"; key: TKey }[] = [
   { to: "/", key: "nav.home" },
   { to: "/about", key: "nav.about" },
   { to: "/realizations", key: "nav.realizations" },
   { to: "/publications", key: "nav.publications" },
+  { to: "/blog", key: "nav.blog" },
   { to: "/contact", key: "nav.contact" },
 ];
 

@@ -16,9 +16,10 @@ export const getAdminOverview = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await assertAdmin(context as Ctx);
     const supabase = (context as Ctx).supabase;
-    const [publications, realizations, content, slides, messages] = await Promise.all([
+    const [publications, realizations, posts, content, slides, messages] = await Promise.all([
       supabase.from("publications").select("*").order("sort_order"),
       supabase.from("realizations").select("*").order("sort_order"),
+      supabase.from("blog_posts").select("*").order("published_on", { ascending: false }),
       supabase.from("site_content").select("*").order("sort_order"),
       supabase.from("hero_slides").select("*").order("sort_order"),
       supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
@@ -26,6 +27,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
     return {
       publications: publications.data ?? [],
       realizations: realizations.data ?? [],
+      posts: posts.data ?? [],
       content: content.data ?? [],
       slides: slides.data ?? [],
       messages: messages.data ?? [],
