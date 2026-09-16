@@ -66,3 +66,24 @@ export const sendContactMessage = createServerFn({ method: "POST" })
     if (error) throw new Error("Envoi impossible");
     return { ok: true as const };
   });
+
+export const getBlogPosts = createServerFn({ method: "GET" }).handler(async () => {
+  const { data } = await publicClient()
+    .from("blog_posts")
+    .select("id, slug, title, excerpt, image_url, author, published_on")
+    .eq("is_published", true)
+    .order("published_on", { ascending: false });
+  return data ?? [];
+});
+
+export const getBlogPost = createServerFn({ method: "GET" })
+  .inputValidator((input: { slug: string }) => input)
+  .handler(async ({ data: input }) => {
+    const { data } = await publicClient()
+      .from("blog_posts")
+      .select("id, slug, title, excerpt, body, image_url, author, published_on")
+      .eq("slug", input.slug)
+      .eq("is_published", true)
+      .maybeSingle();
+    return data;
+  });

@@ -155,3 +155,41 @@ export const deleteMessage = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
+
+export const saveBlogPost = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: {
+    id?: string; slug: string; title: string; excerpt: string; body: string;
+    image_url: string; author: string; is_published: boolean; published_on: string;
+  }) => input)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context as Ctx);
+    const supabase = (context as Ctx).supabase;
+    const slug = (data.slug || data.title)
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    if (!data.title.trim() || !slug) throw new Error("Titre obligatoire");
+    const row = {
+      slug, title: data.title.trim(), excerpt: data.excerpt, body: data.body,
+      image_url: data.image_url, author: data.author || "AST Burundi",
+      is_published: data.is_published, published_on: data.published_on,
+    };
+    const res = data.id
+      ? await supabase.from("blog_posts").update(row).eq("id", data.id)
+      : await supabase.from("blog_posts").insert(row);
+    if (res.error) throw new Error(res.error.message);
+    return { ok: true as const };
+  });
+
+export const deleteBlogPost = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { id: string }) => input)
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context as Ctx);
+    const { error } = await (context as Ctx).supabase.from("blog_posts").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
