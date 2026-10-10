@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { InteriorPage } from "@/components/site-shell";
-import { sendContactMessage } from "@/lib/public-content.functions";
+import { sendContactMessage } from "@/lib/public-content";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/contact")({
@@ -15,7 +14,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
-  const send = useServerFn(sendContactMessage);
+  const send = sendContactMessage;
   const { t } = useI18n();
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 

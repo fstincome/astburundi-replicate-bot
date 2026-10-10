@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
-import { getRealizations } from "@/lib/public-content.functions";
+import { getRealizations } from "@/lib/public-content";
 import { useI18n } from "@/lib/i18n";
 
 function RealizationsFallback({ messageKey }: { messageKey: "real.empty" | "real.unavailable" }) {

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter, SiteHeader } from "@/components/site-shell";
 import { HeroCarousel } from "@/components/hero-carousel";
-import { getHeroSlides, getRealizations, getSiteContent } from "@/lib/public-content.functions";
+import { getHeroSlides, getRealizations, getSiteContent } from "@/lib/public-content";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({

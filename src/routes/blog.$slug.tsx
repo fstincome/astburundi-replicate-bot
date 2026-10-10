@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
-import { getBlogPost } from "@/lib/public-content.functions";
+import { getBlogPost } from "@/lib/public-content";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/blog/$slug")({
