@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
-import { getPublications } from "@/lib/public-content.functions";
+import { getPublications } from "@/lib/public-content";
 import { useI18n } from "@/lib/i18n";
 
 function PublicationsFallback({ messageKey }: { messageKey: "pub.empty" | "pub.unavailable" }) {

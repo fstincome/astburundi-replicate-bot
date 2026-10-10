@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -16,7 +15,7 @@ import {
   deleteHeroSlide,
   setMessageRead,
   deleteMessage,
-} from "@/lib/admin.functions";
+} from "@/lib/admin-data";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -38,7 +37,7 @@ type Tab = "publications" | "realizations" | "blog" | "content" | "messages";
 function AdminPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const overview = useServerFn(getAdminOverview);
+  const overview = getAdminOverview;
   const [tab, setTab] = useState<Tab>("publications");
 
   const { data, isLoading, error, refetch } = useQuery({
@@ -95,8 +94,8 @@ function AdminPage() {
 }
 
 function PublicationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
-  const save = useServerFn(savePublication);
-  const remove = useServerFn(deletePublication);
+  const save = savePublication;
+  const remove = deletePublication;
   const empty = { label: "APPEL D’OFFRES", title: "", description: "", published_on: new Date().toISOString().slice(0, 10), document_url: "", sort_order: rows.length + 1 };
   const [form, setForm] = useState<any>(empty);
   const [busy, setBusy] = useState(false);
@@ -142,8 +141,8 @@ function PublicationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }
 }
 
 function RealizationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
-  const save = useServerFn(saveRealization);
-  const remove = useServerFn(deleteRealization);
+  const save = saveRealization;
+  const remove = deleteRealization;
   const empty = { title: "", subtitle: "", description: "", image_url: "/images/ast/gallery-2.jpeg", sort_order: rows.length + 1 };
   const [form, setForm] = useState<any>(empty);
   const [busy, setBusy] = useState(false);
@@ -188,7 +187,7 @@ function RealizationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }
 }
 
 function ContentPanel({ rows, slides, onDone }: { rows: any[]; slides: any[]; onDone: () => void }) {
-  const save = useServerFn(saveSiteContent);
+  const save = saveSiteContent;
   const [drafts, setDrafts] = useState<Record<string, any>>(() =>
     Object.fromEntries(rows.map((row) => [row.key, { ...row }])),
   );
@@ -226,8 +225,8 @@ function ContentPanel({ rows, slides, onDone }: { rows: any[]; slides: any[]; on
 }
 
 function HeroSlidesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
-  const save = useServerFn(saveHeroSlide);
-  const remove = useServerFn(deleteHeroSlide);
+  const save = saveHeroSlide;
+  const remove = deleteHeroSlide;
   const empty = { title: "", image_url: "/images/ast/hero.jpeg", sort_order: rows.length + 1 };
   const [form, setForm] = useState<any>(empty);
   const [status, setStatus] = useState("");
@@ -277,8 +276,8 @@ function HeroSlidesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) 
 }
 
 function MessagesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
-  const mark = useServerFn(setMessageRead);
-  const remove = useServerFn(deleteMessage);
+  const mark = setMessageRead;
+  const remove = deleteMessage;
 
   if (rows.length === 0) return <p>Aucun message pour le moment.</p>;
 
@@ -305,8 +304,8 @@ function MessagesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
 }
 
 function BlogPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
-  const save = useServerFn(saveBlogPost);
-  const remove = useServerFn(deleteBlogPost);
+  const save = saveBlogPost;
+  const remove = deleteBlogPost;
   const empty = {
     slug: "", title: "", excerpt: "", body: "", image_url: "/images/ast/gallery-2.jpeg",
     author: "AST Burundi", is_published: true, published_on: new Date().toISOString().slice(0, 10),
