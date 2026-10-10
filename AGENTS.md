@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Data access is browser-side only (no createServerFn); RLS is the security boundary. Why: the site must also ship as a static export for cPanel shared hosting via `vite.static.config.ts` (output `dist/client`, plus `public/.htaccess` SPA fallback).
