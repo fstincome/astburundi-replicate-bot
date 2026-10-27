@@ -38,7 +38,7 @@ export function SiteHeader() {
         </nav>
         <div className="header-actions">
           <LanguageSwitch />
-          <Link to="/contact" className="donate-btn">{t("nav.donate")}</Link>
+          <Link to="/donate" className="donate-btn">{t("nav.donate")}</Link>
         </div>
       </div>
     </header>
