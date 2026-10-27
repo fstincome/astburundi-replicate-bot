@@ -18,7 +18,7 @@ export function CmsRichEditor({ value, fallback, onChange }: { value: string; fa
     { label: "Liste à puces", icon: List, active: editor.isActive("bulletList"), run: () => editor.chain().focus().toggleBulletList().run() },
     { label: "Liste numérotée", icon: ListOrdered, active: editor.isActive("orderedList"), run: () => editor.chain().focus().toggleOrderedList().run() },
     { label: "Citation", icon: Quote, active: editor.isActive("blockquote"), run: () => editor.chain().focus().toggleBlockquote().run() },
-    { label: "Lien", icon: LinkIcon, active: editor.isActive("link"), run: () => { const href = window.prompt("Adresse du lien (https://…)", editor.getAttributes("link").href ?? "https://"); if (href === "") editor.chain().focus().unsetLink().run(); else if (href && /^https?:\/\//i.test(href)) editor.chain().focus().setLink({ href }).run(); } },
+    { label: "Lien", icon: LinkIcon, active: editor.isActive("link"), run: () => { const href = window.prompt("Adresse du lien (https://…)", editor.getAttributes("link")["href"] ?? "https://"); if (href === "") editor.chain().focus().unsetLink().run(); else if (href && /^https?:\/\//i.test(href)) editor.chain().focus().setLink({ href }).run(); } },
     { label: "Annuler", icon: Undo2, run: () => editor.chain().focus().undo().run() },
     { label: "Rétablir", icon: Redo2, run: () => editor.chain().focus().redo().run() },
   ];
