@@ -56,7 +56,15 @@ export function SiteFooter() {
         <div><h3>{t("footer.follow")}</h3><p><a href="https://www.facebook.com/profile.php?id=61556201796697">facebook.com</a></p><p>YouTube</p></div>
         <div><h3>{t("footer.links")}</h3><p><Link to="/about">{t("footer.about")}</Link></p><p><Link to="/publications">{t("footer.publications")}</Link></p></div>
       </div>
-      <div className="copyright">All Rights Reserved. © 2014 astburundi Design By : Nova Software Company</div>
+      <div className="copyright">
+        <p className="copyright-left">Copyright © {new Date().getFullYear()} AST Burundi. {t("footer.rights")}</p>
+        <p className="copyright-right">
+          {t("footer.madeWith")}
+          <Heart className="made-heart" aria-hidden="true" />
+          {t("footer.by")}
+          <a className="credit-link" href="https://www.sightnetwork.org/" target="_blank" rel="noopener noreferrer">SIGHT AFRICA</a>
+        </p>
+      </div>
     </footer>
   );
 }
