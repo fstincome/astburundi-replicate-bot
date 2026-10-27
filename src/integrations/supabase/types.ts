@@ -18,12 +18,14 @@ export type Database = {
         Row: {
           author: string
           body: string
+          category: string
           created_at: string
           excerpt: string
           id: string
           image_url: string
           is_published: boolean
           published_on: string
+          rich_content: string
           slug: string
           title: string
           updated_at: string
@@ -31,12 +33,14 @@ export type Database = {
         Insert: {
           author?: string
           body?: string
+          category?: string
           created_at?: string
           excerpt?: string
           id?: string
           image_url?: string
           is_published?: boolean
           published_on?: string
+          rich_content?: string
           slug: string
           title: string
           updated_at?: string
@@ -44,12 +48,14 @@ export type Database = {
         Update: {
           author?: string
           body?: string
+          category?: string
           created_at?: string
           excerpt?: string
           id?: string
           image_url?: string
           is_published?: boolean
           published_on?: string
+          rich_content?: string
           slug?: string
           title?: string
           updated_at?: string
@@ -115,34 +121,46 @@ export type Database = {
       }
       publications: {
         Row: {
+          category: string
           created_at: string
           description: string
           document_url: string | null
           id: string
+          image_url: string
+          is_published: boolean
           label: string
           published_on: string
+          rich_content: string
           sort_order: number
           title: string
           updated_at: string
         }
         Insert: {
+          category?: string
           created_at?: string
           description?: string
           document_url?: string | null
           id?: string
+          image_url?: string
+          is_published?: boolean
           label?: string
           published_on?: string
+          rich_content?: string
           sort_order?: number
           title: string
           updated_at?: string
         }
         Update: {
+          category?: string
           created_at?: string
           description?: string
           document_url?: string | null
           id?: string
+          image_url?: string
+          is_published?: boolean
           label?: string
           published_on?: string
+          rich_content?: string
           sort_order?: number
           title?: string
           updated_at?: string
