@@ -27,6 +27,9 @@ const dict = {
     "footer.links": "Liens rapides",
     "footer.about": "À propos",
     "footer.publications": "Publications",
+    "footer.rights": "Tous droits réservés.",
+    "footer.madeWith": "Fait avec",
+    "footer.by": "par",
     "home.title": "Association pour la Solidarité au Travail (AST)",
     "home.intro":
       "Nous accompagnons les communautés burundaises par des actions concrètes en faveur de l’inclusion, de l’autonomie et du développement durable.",
@@ -118,6 +121,9 @@ const dict = {
     "footer.links": "Quick links",
     "footer.about": "About",
     "footer.publications": "Publications",
+    "footer.rights": "All rights reserved.",
+    "footer.madeWith": "Made with",
+    "footer.by": "by",
     "home.title": "Association for Solidarity at Work (AST)",
     "home.intro":
       "We support Burundian communities through practical action promoting inclusion, self-reliance and sustainable development.",
