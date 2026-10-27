@@ -35,8 +35,11 @@ export function SiteHeader() {
               {t(item.key)}
             </Link>
           ))}
-          <LanguageSwitch />
         </nav>
+        <div className="header-actions">
+          <LanguageSwitch />
+          <Link to="/contact" className="donate-btn">{t("nav.donate")}</Link>
+        </div>
       </div>
     </header>
   );
