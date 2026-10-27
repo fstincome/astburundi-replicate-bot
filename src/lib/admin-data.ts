@@ -26,6 +26,7 @@ export async function getAdminOverview() {
     supabase.from("hero_slides").select("*").order("sort_order"),
     supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
   ]);
+  [publications, realizations, posts, content, slides, messages].forEach(check);
   return {
     publications: publications.data ?? [],
     realizations: realizations.data ?? [],
@@ -39,11 +40,14 @@ export async function getAdminOverview() {
 export async function savePublication({ data }: { data: {
   id?: string; label: string; title: string; description: string;
   published_on: string; document_url: string; sort_order: number;
+  category: string; is_published: boolean; image_url: string; rich_content: string;
 } }): Promise<Ok> {
   const row = {
     label: data.label, title: data.title, description: data.description,
     published_on: data.published_on, document_url: data.document_url || null,
     sort_order: data.sort_order,
+    category: data.category.trim() || "Appels d’offres", is_published: data.is_published,
+    image_url: data.image_url, rich_content: data.rich_content,
   };
   check(data.id
     ? await supabase.from("publications").update(row).eq("id", data.id)
@@ -113,6 +117,7 @@ export async function deleteMessage({ data }: { data: { id: string } }): Promise
 export async function saveBlogPost({ data }: { data: {
   id?: string; slug: string; title: string; excerpt: string; body: string;
   image_url: string; author: string; is_published: boolean; published_on: string;
+  category: string; rich_content: string;
 } }): Promise<Ok> {
   const slug = (data.slug || data.title)
     .toLowerCase()
@@ -125,6 +130,7 @@ export async function saveBlogPost({ data }: { data: {
     slug, title: data.title.trim(), excerpt: data.excerpt, body: data.body,
     image_url: data.image_url, author: data.author || "AST Burundi",
     is_published: data.is_published, published_on: data.published_on,
+    category: data.category.trim() || "Actualités", rich_content: data.rich_content,
   };
   check(data.id
     ? await supabase.from("blog_posts").update(row).eq("id", data.id)
