@@ -28,7 +28,8 @@ function publicClient() {
 export async function getPublications() {
   const { data } = await publicClient()
     .from("publications")
-    .select("id, label, title, description, published_on, document_url")
+    .select("id, label, title, description, published_on, document_url, category, image_url, rich_content")
+    .eq("is_published", true)
     .order("sort_order", { ascending: true });
   return data ?? [];
 }
@@ -78,7 +79,7 @@ export async function sendContactMessage({
 export async function getBlogPosts() {
   const { data } = await publicClient()
     .from("blog_posts")
-    .select("id, slug, title, excerpt, image_url, author, published_on")
+    .select("id, slug, title, excerpt, image_url, author, published_on, category")
     .eq("is_published", true)
     .order("published_on", { ascending: false });
   return data ?? [];
@@ -87,7 +88,7 @@ export async function getBlogPosts() {
 export async function getBlogPost({ data: input }: { data: { slug: string } }) {
   const { data } = await publicClient()
     .from("blog_posts")
-    .select("id, slug, title, excerpt, body, image_url, author, published_on")
+    .select("id, slug, title, excerpt, body, image_url, author, published_on, category, rich_content")
     .eq("slug", input.slug)
     .eq("is_published", true)
     .maybeSingle();
