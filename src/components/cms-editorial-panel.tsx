@@ -12,7 +12,7 @@ type Draft = { id?: string; title: string; category: string; label: string; desc
 export function CmsEditorialPanel({ kind, rows, onDone }: { kind: "publications" | "blog"; rows: (Publication | Post)[]; onDone: () => void }) {
   const isBlog = kind === "blog";
   const defaults = isBlog ? ["Actualités", "Vie associative", "Terrain", "Environnement"] : ["Appels d’offres", "Rapports", "Communiqués", "Documents"];
-  const empty = (): Draft => ({ title: "", category: defaults[0], label: "APPEL D’OFFRES", description: "", excerpt: "", body: "", rich_content: "", image_url: "", is_published: false, published_on: new Date().toISOString().slice(0, 10), document_url: "", sort_order: rows.length + 1, slug: "", author: "AST Burundi" });
+  const empty = (): Draft => ({ title: "", category: defaults[0] ?? "Actualités", label: "APPEL D’OFFRES", description: "", excerpt: "", body: "", rich_content: "", image_url: "", is_published: false, published_on: new Date().toISOString().slice(0, 10), document_url: "", sort_order: rows.length + 1, slug: "", author: "AST Burundi" });
   const [form, setForm] = useState<Draft | null>(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
