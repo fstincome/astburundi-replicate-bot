@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DonateRouteImport } from './routes/donate'
 import { Route as PublicationsRouteImport } from './routes/publications'
 import { Route as RealizationsRouteImport } from './routes/realizations'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -42,6 +43,11 @@ const AuthRoute = AuthRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicationsRoute = PublicationsRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
   '/publications': typeof PublicationsRoute
   '/realizations': typeof RealizationsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
   '/publications': typeof PublicationsRoute
   '/realizations': typeof RealizationsRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
   '/publications': typeof PublicationsRoute
   '/realizations': typeof RealizationsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
+    | '/donate'
     | '/publications'
     | '/realizations'
     | '/admin'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
+    | '/donate'
     | '/publications'
     | '/realizations'
     | '/admin'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
+    | '/donate'
     | '/publications'
     | '/realizations'
     | '/_authenticated/admin'
@@ -148,6 +160,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
+  DonateRoute: typeof DonateRoute
   PublicationsRoute: typeof PublicationsRoute
   RealizationsRoute: typeof RealizationsRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -189,6 +202,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/publications': {
@@ -246,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
+  DonateRoute: DonateRoute,
   PublicationsRoute: PublicationsRoute,
   RealizationsRoute: RealizationsRoute,
   BlogSlugRoute: BlogSlugRoute,
