@@ -1,16 +1,15 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { CmsEditorialPanel } from "@/components/cms-editorial-panel";
+import { Button } from "@/components/ui/button";
+import { FileText, Images, Newspaper, House, Mail, ExternalLink, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   getAdminOverview,
-  savePublication,
-  deletePublication,
   saveRealization,
   deleteRealization,
   saveSiteContent,
-  saveBlogPost,
-  deleteBlogPost,
   saveHeroSlide,
   deleteHeroSlide,
   setMessageRead,
@@ -57,15 +56,17 @@ function AdminPage() {
       <header className="admin-top">
         <div>
           <img src="/images/ast/logo.png" alt="AST" />
-          <span>Espace administrateur</span>
+          <span>AST Burundi <small>Édition & contenus</small></span>
         </div>
         <div className="admin-top-actions">
-          <a href="/">Voir le site</a>
-          <button type="button" onClick={signOut}>Se déconnecter</button>
+          <a href="/" target="_blank" rel="noopener noreferrer"><ExternalLink size={16} />Voir le site</a>
+          <Button variant="outline" onClick={signOut}><LogOut size={16} />Se déconnecter</Button>
         </div>
       </header>
 
-      <nav className="admin-tabs">
+      <div className="cms-admin-layout">
+      <nav className="admin-tabs" aria-label="Gestion des contenus">
+        <span className="cms-nav-label">ESPACE CMS</span>
         {([
           ["publications", "Publications"],
           ["realizations", "Réalisations"],
@@ -73,70 +74,25 @@ function AdminPage() {
           ["content", "Accueil"],
           ["messages", "Messages"],
         ] as [Tab, string][]).map(([value, label]) => (
-          <button key={value} type="button" className={tab === value ? "active" : ""} onClick={() => setTab(value)}>
+          <Button key={value} variant="ghost" className={tab === value ? "active" : ""} aria-current={tab === value ? "page" : undefined} onClick={() => setTab(value)}>
+            {value === "publications" ? <FileText /> : value === "realizations" ? <Images /> : value === "blog" ? <Newspaper /> : value === "content" ? <House /> : <Mail />}
             {label}
             {value === "messages" && data ? ` (${data.messages.filter((m: any) => !m.is_read).length})` : ""}
-          </button>
+          </Button>
         ))}
       </nav>
 
       <main className="admin-main">
         {isLoading && <p>Chargement…</p>}
         {error && <p className="auth-error">Accès refusé ou erreur de chargement.</p>}
-        {data && tab === "publications" && <PublicationsPanel rows={data.publications} onDone={refetch} />}
+        {data && tab === "publications" && <CmsEditorialPanel kind="publications" rows={data.publications} onDone={refetch} />}
         {data && tab === "realizations" && <RealizationsPanel rows={data.realizations} onDone={refetch} />}
-        {data && tab === "blog" && <BlogPanel rows={data.posts} onDone={refetch} />}
+        {data && tab === "blog" && <CmsEditorialPanel kind="blog" rows={data.posts} onDone={refetch} />}
         {data && tab === "content" && <ContentPanel rows={data.content} slides={data.slides} onDone={refetch} />}
         {data && tab === "messages" && <MessagesPanel rows={data.messages} onDone={refetch} />}
       </main>
+      </div>
     </div>
-  );
-}
-
-function PublicationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
-  const save = savePublication;
-  const remove = deletePublication;
-  const empty = { label: "APPEL D’OFFRES", title: "", description: "", published_on: new Date().toISOString().slice(0, 10), document_url: "", sort_order: rows.length + 1 };
-  const [form, setForm] = useState<any>(empty);
-  const [busy, setBusy] = useState(false);
-
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    setBusy(true);
-    await save({ data: { ...form, sort_order: Number(form.sort_order) } });
-    setBusy(false);
-    setForm(empty);
-    onDone();
-  }
-
-  return (
-    <section className="admin-panel">
-      <form className="admin-form" onSubmit={submit}>
-        <h2>{form.id ? "Modifier la publication" : "Nouvelle publication"}</h2>
-        <label>Intitulé<input value={form.label} onChange={(e) => setForm({ ...form, label: e.target.value })} required /></label>
-        <label>Titre<input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required /></label>
-        <label className="full">Description<textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></label>
-        <label>Date<input type="date" value={form.published_on} onChange={(e) => setForm({ ...form, published_on: e.target.value })} required /></label>
-        <label>Lien du document<input value={form.document_url ?? ""} onChange={(e) => setForm({ ...form, document_url: e.target.value })} /></label>
-        <label>Ordre<input type="number" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} /></label>
-        <div className="admin-form-actions">
-          <button type="submit" disabled={busy}>{busy ? "Enregistrement…" : "Enregistrer"}</button>
-          {form.id && <button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</button>}
-        </div>
-      </form>
-
-      <ul className="admin-list">
-        {rows.map((row) => (
-          <li key={row.id}>
-            <div><strong>{row.title}</strong><span>{row.label} · {row.published_on}</span></div>
-            <div className="admin-row-actions">
-              <button type="button" onClick={() => setForm({ ...row, document_url: row.document_url ?? "" })}>Modifier</button>
-              <button type="button" className="danger" onClick={async () => { await remove({ data: { id: row.id } }); onDone(); }}>Supprimer</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 
@@ -166,8 +122,8 @@ function RealizationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }
         <label>Image (chemin ou lien)<input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} /></label>
         <label>Ordre<input type="number" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} /></label>
         <div className="admin-form-actions">
-          <button type="submit" disabled={busy}>{busy ? "Enregistrement…" : "Enregistrer"}</button>
-          {form.id && <button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</button>}
+          <Button type="submit" disabled={busy}>{busy ? "Enregistrement…" : "Enregistrer"}</Button>
+          {form.id && <Button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</Button>}
         </div>
       </form>
 
@@ -176,8 +132,8 @@ function RealizationsPanel({ rows, onDone }: { rows: any[]; onDone: () => void }
           <li key={row.id}>
             <div><strong>{row.title}</strong><span>{row.subtitle}</span></div>
             <div className="admin-row-actions">
-              <button type="button" onClick={() => setForm(row)}>Modifier</button>
-              <button type="button" className="danger" onClick={async () => { await remove({ data: { id: row.id } }); onDone(); }}>Supprimer</button>
+              <Button type="button" onClick={() => setForm(row)}>Modifier</Button>
+              <Button type="button" className="danger" onClick={async () => { await remove({ data: { id: row.id } }); onDone(); }}>Supprimer</Button>
             </div>
           </li>
         ))}
@@ -214,7 +170,7 @@ function ContentPanel({ rows, slides, onDone }: { rows: any[]; slides: any[]; on
             <label className="full">Texte<textarea rows={4} value={draft.body} onChange={(e) => setDrafts({ ...drafts, [row.key]: { ...draft, body: e.target.value } })} /></label>
             <label className="full">Image<input value={draft.image_url} onChange={(e) => setDrafts({ ...drafts, [row.key]: { ...draft, image_url: e.target.value } })} /></label>
             <div className="admin-form-actions">
-              <button type="submit">Enregistrer</button>
+              <Button type="submit">Enregistrer</Button>
               {savedKey === row.key && <span className="admin-saved">Enregistré</span>}
             </div>
           </form>
@@ -252,8 +208,8 @@ function HeroSlidesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) 
         <label>Ordre<input type="number" min="1" value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} required /></label>
         <label className="full">Image (chemin ou lien)<input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} required /></label>
         <div className="admin-form-actions">
-          <button type="submit">Enregistrer</button>
-          {form.id && <button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</button>}
+          <Button type="submit">Enregistrer</Button>
+          {form.id && <Button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</Button>}
           {status && <span className="admin-saved">{status}</span>}
         </div>
       </form>
@@ -263,10 +219,10 @@ function HeroSlidesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) 
             <img src={row.image_url} alt="" />
             <div><strong>{row.title}</strong><span>Diapositive {row.sort_order}</span></div>
             <div className="admin-row-actions">
-              <button type="button" onClick={() => setForm({ ...row })}>Modifier</button>
-              <button type="button" className="danger" disabled={rows.length <= 1} title={rows.length <= 1 ? "Une diapositive minimum" : undefined} onClick={async () => {
+              <Button type="button" onClick={() => setForm({ ...row })}>Modifier</Button>
+              <Button type="button" className="danger" disabled={rows.length <= 1} title={rows.length <= 1 ? "Une diapositive minimum" : undefined} onClick={async () => {
                 try { await remove({ data: { id: row.id } }); onDone(); } catch (error) { setStatus(error instanceof Error ? error.message : "Suppression impossible"); }
-              }}>Supprimer</button>
+              }}>Supprimer</Button>
             </div>
           </li>
         ))}
@@ -292,10 +248,10 @@ function MessagesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
           </div>
           <p>{row.message}</p>
           <div className="admin-row-actions">
-            <button type="button" onClick={async () => { await mark({ data: { id: row.id, is_read: !row.is_read } }); onDone(); }}>
+            <Button type="button" onClick={async () => { await mark({ data: { id: row.id, is_read: !row.is_read } }); onDone(); }}>
               {row.is_read ? "Marquer non lu" : "Marquer comme lu"}
-            </button>
-            <button type="button" className="danger" onClick={async () => { await remove({ data: { id: row.id } }); onDone(); }}>Supprimer</button>
+            </Button>
+            <Button type="button" className="danger" onClick={async () => { await remove({ data: { id: row.id } }); onDone(); }}>Supprimer</Button>
           </div>
         </li>
       ))}
@@ -303,59 +259,3 @@ function MessagesPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
   );
 }
 
-function BlogPanel({ rows, onDone }: { rows: any[]; onDone: () => void }) {
-  const save = saveBlogPost;
-  const remove = deleteBlogPost;
-  const empty = {
-    slug: "", title: "", excerpt: "", body: "", image_url: "/images/ast/gallery-2.jpeg",
-    author: "AST Burundi", is_published: true, published_on: new Date().toISOString().slice(0, 10),
-  };
-  const [form, setForm] = useState<any>(empty);
-  const [status, setStatus] = useState("");
-
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    setStatus("Enregistrement…");
-    try {
-      await save({ data: form });
-      setForm(empty);
-      setStatus("Enregistré");
-      onDone();
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Enregistrement impossible");
-    }
-  }
-
-  return (
-    <section className="admin-panel">
-      <form className="admin-form" onSubmit={submit}>
-        <h2>{form.id ? "Modifier l’article" : "Nouvel article"}</h2>
-        <label>Titre<input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required /></label>
-        <label>Lien court (optionnel)<input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="genere-depuis-le-titre" /></label>
-        <label className="full">Chapeau<textarea rows={2} value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} /></label>
-        <label className="full">Contenu<textarea rows={10} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} /></label>
-        <label>Image (chemin ou lien)<input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} /></label>
-        <label>Auteur<input value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} /></label>
-        <label>Date<input type="date" value={form.published_on} onChange={(e) => setForm({ ...form, published_on: e.target.value })} required /></label>
-        <label>Publié<input type="checkbox" checked={form.is_published} onChange={(e) => setForm({ ...form, is_published: e.target.checked })} /></label>
-        <div className="admin-form-actions">
-          <button type="submit">Publier / Enregistrer</button>
-          {form.id && <button type="button" className="ghost" onClick={() => setForm(empty)}>Annuler</button>}
-          {status && <span className="admin-saved">{status}</span>}
-        </div>
-      </form>
-
-      <ul className="admin-list">
-        {rows.map((row) => (
-          <li key={row.id}>
-            <div><strong>{row.title}</strong><span>{row.published_on} · {row.is_published ? "publié" : "brouillon"}</span></div>
-            <div className="admin-row-actions">
-              <button type="button" onClick={() => setForm({ ...row })}>Modifier</button>
-              <button type="button" className="danger" onClick={async () => { await remove({ data: { id: row.id } }); onDone(); }}>Supprimer</button>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
