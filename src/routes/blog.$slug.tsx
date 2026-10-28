@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
 import { getBlogPost } from "@/lib/public-content";
 import { useI18n } from "@/lib/i18n";
+import { RichContent } from "@/components/rich-content";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:description", content: loaderData.excerpt || loaderData.title },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
+        ...(/^https:\/\//i.test(loaderData.image_url) ? [{ property: "og:image", content: loaderData.image_url }, { name: "twitter:image", content: loaderData.image_url }] : []),
       ],
       links: [{ rel: "canonical", href: `/blog/${loaderData.slug}` }],
     };
@@ -48,14 +50,13 @@ function BlogPostPage() {
   return (
     <InteriorPage title={post.title} eyebrow={t("blog.eyebrow")}>
       <article className="blog-article">
+        <span className="editorial-category">{post.category}</span>
         <p className="blog-meta">
           {date.toLocaleDateString(lang === "fr" ? "fr-FR" : "en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })} · {post.author}
         </p>
         {post.image_url && <img src={post.image_url} alt={post.title} />}
         {post.excerpt && <p className="blog-excerpt">{post.excerpt}</p>}
-        {post.body.split(/\n{2,}/).map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
+        <RichContent value={post.rich_content} fallback={post.body} />
       </article>
       <div className="page-actions">
         <Link to="/blog" className="action-link secondary">{t("blog.back")}</Link>
