@@ -9,6 +9,8 @@ export const Route = createFileRoute("/donate")({
       { name: "description", content: "Soutenez l’Association pour la Solidarité au Travail : virement bancaire, Mobile Money, Western Union et MoneyGram." },
       { property: "og:title", content: "Faire un don — AST Burundi" },
       { property: "og:description", content: "Soutenez les actions de l’AST au Burundi par un don." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/donate" }],
   }),

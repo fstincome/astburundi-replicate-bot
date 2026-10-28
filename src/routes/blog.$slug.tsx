@@ -12,7 +12,7 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Article introuvable — AST Burundi" }, { name: "robots", content: "noindex" }] };
+      return { meta: [{ title: "Article introuvable — AST Burundi" }, { name: "description", content: "Cet article AST Burundi n’est pas disponible." }, { property: "og:title", content: "Article introuvable — AST Burundi" }, { property: "og:description", content: "Cet article AST Burundi n’est pas disponible." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" }, { name: "robots", content: "noindex" }] };
     }
     return {
       meta: [
