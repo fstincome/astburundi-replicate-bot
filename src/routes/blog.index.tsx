@@ -2,6 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { InteriorPage } from "@/components/site-shell";
 import { getBlogPosts } from "@/lib/public-content";
 import { useI18n } from "@/lib/i18n";
+import { useState } from "react";
+import { EditorialFilters } from "@/components/editorial-filters";
+import { filterEditorial } from "@/lib/editorial";
 
 export const Route = createFileRoute("/blog/")({
   loader: () => getBlogPosts(),
@@ -33,18 +36,23 @@ const MONTHS = {
 function BlogPage() {
   const posts = Route.useLoaderData();
   const { t, lang } = useI18n();
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const visible = filterEditorial(posts, search, category);
 
   return (
     <InteriorPage title={t("blog.title")} eyebrow={t("blog.eyebrow")}>
       <p className="section-intro">{t("blog.intro")}</p>
+      <EditorialFilters search={search} category={category} categories={[...new Set(posts.map(p => p.category))]} onSearch={setSearch} onCategory={setCategory} />
       <div className="blog-grid">
-        {posts.length === 0 && <p>{t("blog.empty")}</p>}
-        {posts.map((post) => {
+        {visible.length === 0 && <p>{t("blog.empty")}</p>}
+        {visible.map((post) => {
           const date = new Date(post.published_on);
           return (
             <article className="blog-card" key={post.id}>
               {post.image_url && <img src={post.image_url} alt={post.title} loading="lazy" />}
               <div>
+                <span className="editorial-category">{post.category}</span>
                 <span className="blog-meta">
                   {date.getUTCDate()} {MONTHS[lang][date.getUTCMonth()]} {date.getUTCFullYear()} · {post.author}
                 </span>
