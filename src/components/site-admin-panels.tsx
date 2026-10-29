@@ -11,6 +11,8 @@ const sections: Record<string, string> = {
 };
 const pageRoutes = ["/", "/about", "/realizations", "/publications", "/blog", "/contact", "/donate"];
 
+let seeding: Promise<unknown> | null = null;
+
 export function MenuPanel() {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [status, setStatus] = useState("Chargement…");
@@ -18,7 +20,8 @@ export function MenuPanel() {
   async function load() {
     let { data, error } = await supabase.from("menu_items").select("*").order("sort_order");
     if (!error && data && data.length === 0) {
-      await supabase.from("menu_items").insert(defaultMenu);
+      seeding ??= Promise.resolve(supabase.from("menu_items").insert(defaultMenu));
+      await seeding;
       ({ data, error } = await supabase.from("menu_items").select("*").order("sort_order"));
     }
     if (error) return setStatus(error.message);
