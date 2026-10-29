@@ -1,16 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { Heart } from "lucide-react";
+import { ChevronDown, Heart } from "lucide-react";
 import type { ReactNode } from "react";
-import { useI18n, type TKey } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
+import { useMenu, type MenuItem } from "@/lib/menu";
 
-const navigation: { to: "/" | "/about" | "/realizations" | "/publications" | "/blog" | "/contact"; key: TKey }[] = [
-  { to: "/", key: "nav.home" },
-  { to: "/about", key: "nav.about" },
-  { to: "/realizations", key: "nav.realizations" },
-  { to: "/publications", key: "nav.publications" },
-  { to: "/blog", key: "nav.blog" },
-  { to: "/contact", key: "nav.contact" },
-];
+function MenuLink({ item, label }: { item: MenuItem; label: ReactNode }) {
+  if (/^https?:\/\//.test(item.route)) return <a href={item.route} target="_blank" rel="noopener noreferrer">{label}</a>;
+  return (
+    <Link to={item.route as "/"} activeProps={{ className: "active" }} activeOptions={{ exact: item.route === "/" }}>
+      {label}
+    </Link>
+  );
+}
 
 function LanguageSwitch() {
   const { lang, setLang } = useI18n();
@@ -23,7 +24,9 @@ function LanguageSwitch() {
 }
 
 export function SiteHeader() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const menu = useMenu();
+  const label = (i: MenuItem) => (lang === "en" && i.label_en.trim()) || i.label_fr;
   return (
     <header className="site-header">
       <div className="site-nav">
@@ -31,11 +34,18 @@ export function SiteHeader() {
           <img src="/images/ast/logo.png" alt="Logo AST" className="site-logo" />
         </Link>
         <nav aria-label="Navigation" className="desktop-nav">
-          {navigation.map((item) => (
-            <Link key={item.to} to={item.to} activeProps={{ className: "active" }} activeOptions={{ exact: item.to === "/" }}>
-              {t(item.key)}
-            </Link>
-          ))}
+          {menu.map((item) =>
+            item.children.length ? (
+              <div key={item.id} className="nav-group">
+                <MenuLink item={item} label={<>{label(item)}<ChevronDown size={14} aria-hidden="true" /></>} />
+                <div className="nav-sub">
+                  {item.children.map((c) => <MenuLink key={c.id} item={c} label={label(c)} />)}
+                </div>
+              </div>
+            ) : (
+              <MenuLink key={item.id} item={item} label={label(item)} />
+            ),
+          )}
         </nav>
         <div className="header-actions">
           <LanguageSwitch />
