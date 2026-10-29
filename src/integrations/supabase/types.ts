@@ -119,6 +119,47 @@ export type Database = {
         }
         Relationships: []
       }
+      menu_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          label_en: string
+          label_fr: string
+          parent_id: string | null
+          route: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label_en?: string
+          label_fr: string
+          parent_id?: string | null
+          route: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label_en?: string
+          label_fr?: string
+          parent_id?: string | null
+          route?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       publications: {
         Row: {
           category: string
@@ -223,6 +264,27 @@ export type Database = {
           key?: string
           sort_order?: number
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      text_overrides: {
+        Row: {
+          en: string
+          fr: string
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          en?: string
+          fr?: string
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          en?: string
+          fr?: string
+          key?: string
           updated_at?: string
         }
         Relationships: []
