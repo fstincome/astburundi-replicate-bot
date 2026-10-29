@@ -2,8 +2,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { CmsEditorialPanel } from "@/components/cms-editorial-panel";
+import { MenuPanel, PagesPanel } from "@/components/site-admin-panels";
 import { Button } from "@/components/ui/button";
-import { FileText, Images, Newspaper, House, Mail, ExternalLink, LogOut } from "lucide-react";
+import { FileText, Images, Newspaper, House, Mail, Menu, PenLine, ExternalLink, LogOut } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   getAdminOverview,
@@ -31,7 +32,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
 });
 
-type Tab = "publications" | "realizations" | "blog" | "content" | "messages";
+type Tab = "pages" | "menu" | "publications" | "realizations" | "blog" | "content" | "messages";
 
 function AdminPage() {
   const navigate = useNavigate();
@@ -73,9 +74,11 @@ function AdminPage() {
           ["blog", "Blog"],
           ["content", "Accueil"],
           ["messages", "Messages"],
+          ["pages", "Pages"],
+          ["menu", "Menu"],
         ] as [Tab, string][]).map(([value, label]) => (
           <Button key={value} variant="ghost" className={tab === value ? "active" : ""} aria-current={tab === value ? "page" : undefined} onClick={() => setTab(value)}>
-            {value === "publications" ? <FileText /> : value === "realizations" ? <Images /> : value === "blog" ? <Newspaper /> : value === "content" ? <House /> : <Mail />}
+            {value === "publications" ? <FileText /> : value === "realizations" ? <Images /> : value === "blog" ? <Newspaper /> : value === "content" ? <House /> : value === "pages" ? <PenLine /> : value === "menu" ? <Menu /> : <Mail />}
             {label}
             {value === "messages" && data ? ` (${data.messages.filter((m: any) => !m.is_read).length})` : ""}
           </Button>
@@ -89,6 +92,8 @@ function AdminPage() {
         {data && tab === "realizations" && <RealizationsPanel rows={data.realizations} onDone={refetch} />}
         {data && tab === "blog" && <CmsEditorialPanel kind="blog" rows={data.posts} onDone={refetch} />}
         {data && tab === "content" && <ContentPanel rows={data.content} slides={data.slides} onDone={refetch} />}
+        {tab === "pages" && <PagesPanel />}
+        {tab === "menu" && <MenuPanel />}
         {data && tab === "messages" && <MessagesPanel rows={data.messages} onDone={refetch} />}
       </main>
       </div>

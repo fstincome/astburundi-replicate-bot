@@ -194,6 +194,9 @@ const dict = {
 } as const;
 
 export type TKey = keyof (typeof dict)["fr"];
+export const defaultTexts = dict as unknown as Record<Lang, Record<string, string>>;
+
+type Overrides = Record<string, { fr: string; en: string }>;
 
 const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: (k: TKey) => string }>({
   lang: "fr",
@@ -203,10 +206,16 @@ const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: (
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("fr");
+  const [overrides, setOverrides] = useState<Overrides>({});
 
   useEffect(() => {
     const stored = window.localStorage.getItem("ast-lang");
     if (stored === "en" || stored === "fr") setLangState(stored);
+    import("@/integrations/supabase/client").then(({ supabase }) =>
+      supabase.from("text_overrides").select("key, fr, en").then(({ data }) => {
+        if (data) setOverrides(Object.fromEntries(data.map((r) => [r.key, { fr: r.fr, en: r.en }])));
+      }),
+    );
   }, []);
 
   useEffect(() => {
@@ -218,9 +227,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem("ast-lang", next);
   }
 
-  return (
-    <LangContext.Provider value={{ lang, setLang, t: (k) => dict[lang][k] }}>{children}</LangContext.Provider>
-  );
+  const t = (k: TKey) => overrides[k]?.[lang]?.trim() || dict[lang][k];
+  return <LangContext.Provider value={{ lang, setLang, t }}>{children}</LangContext.Provider>;
 }
 
 export function useI18n() {

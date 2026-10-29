@@ -8,6 +8,13 @@
       "when": 1793096400842,
       "tag": "0000_cms_publication_editor",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793275612006,
+      "tag": "0001_page_texts_and_menu",
+      "breakpoints": true
     }
   ]
 }
